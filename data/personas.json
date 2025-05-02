@@ -1,0 +1,282 @@
+[
+    {
+        "persona_id": 105,
+        "name": "Emily Nguyen",
+        "took_covid_vaccine": true,
+        "description": "A registered nurse in Toronto who is quite skeptical about vaccinations.",
+        "demographics": {
+          "age": 34,
+          "gender": "Female",
+          "location": "Toronto, ON",
+          "occupation": "Registered Nurse",
+          "education": "Bachelor of Science in Nursing"
+        },
+        "grounding_notes": "Frontline healthcare worker, experienced the pandemic's impact firsthand.",
+        "personality": {
+          "archetype": "The Caregiver",
+          "notes": "Empathetic, dedicated to patient care and community well-being."
+        },
+        "beliefs_and_attitudes": {
+          "initial_stance": "Strongly supportive",
+          "stance_description": "Advocated for early vaccination, emphasizing its role in protecting vulnerable populations.",
+          "trust_levels": {
+            "scientific_bodies": "very high",
+            "government": "high",
+            "mainstream_media": "moderate",
+            "social_media": "low",
+            "expert_opinions": "very high"
+          },
+          "concerns": [
+            "Protecting immunocompromised patients",
+            "Combating misinformation",
+            "Ensuring equitable vaccine access"
+          ],
+          "key_motivator": "Safeguarding public health and patient safety"
+        }, 
+        "articles_read": [
+        "The Importance of Vaccinating Healthcare Workers",
+        "COVID-19 Vaccine Equity and Access Challenges",
+        "Fighting Misinformation in Public Health Campaigns"
+        ]
+      }, 
+      {
+        "persona_id": 106,
+        "name": "James Patel",
+        "took_covid_vaccine": true,
+        "description": "A software developer in Vancouver who values data-driven decisions.",
+        "demographics": {
+          "age": 29,
+          "gender": "Male",
+          "location": "Vancouver, BC",
+          "occupation": "Software Developer",
+          "education": "Bachelor's in Computer Science"
+        },
+        "grounding_notes": "Analytical thinker, relies on empirical evidence for decision-making.",
+        "personality": {
+          "archetype": "The Analyst",
+          "notes": "Curious, methodical, and values transparency."
+        },
+        "beliefs_and_attitudes": {
+          "initial_stance": "Supportive after research",
+          "stance_description": "Reviewed clinical trial data before deciding to vaccinate.",
+          "trust_levels": {
+            "scientific_bodies": "high",
+            "government": "moderate",
+            "mainstream_media": "low",
+            "social_media": "very low",
+            "expert_opinions": "high"
+          },
+          "concerns": [
+            "Long-term efficacy",
+            "Data transparency",
+            "Algorithmic bias in health data"
+          ],
+          "key_motivator": "Making informed, evidence-based health decisions"
+        }, 
+        "articles_read": [
+        "mRNA Vaccine Efficacy: A Data-Driven Review",
+        "Transparency in Clinical Trials and Vaccine Development",
+        "How Algorithms Affect Health Equity in the Pandemic Era"
+        ]
+      }
+,{
+    "persona_id": 107,
+    "name": "David Brown",
+    "took_covid_vaccine": true,
+    "description": "A retired teacher in Calgary who is cautious about health interventions.",
+    "demographics": {
+      "age": 68,
+      "gender": "Male",
+      "location": "Calgary, AB",
+      "occupation": "Retired Teacher",
+      "education": "Master's in Education"
+    },
+    "grounding_notes": "Values lifelong learning and community involvement.",
+    "personality": {
+      "archetype": "The Sage",
+      "notes": "Reflective, values wisdom and prudent action."
+    },
+    "beliefs_and_attitudes": {
+      "initial_stance": "Cautiously supportive",
+      "stance_description": "Waited for more information before deciding to vaccinate.",
+      "trust_levels": {
+        "scientific_bodies": "moderate",
+        "government": "moderate",
+        "mainstream_media": "moderate",
+        "social_media": "low",
+        "expert_opinions": "high"
+      },
+      "concerns": [
+        "Potential side effects",
+        "Interactions with existing medications",
+        "Misinformation among peers"
+      ],
+      "key_motivator": "Protecting personal health and contributing to community safety"
+    },
+    "articles_read": [
+      "Understanding COVID-19 Vaccine Side Effects in Older Adults",
+      "How Seniors Can Navigate Vaccine Misinformation",
+      "Community Immunity: Why It Matters for Retirees"
+    ]
+  },
+  {
+    "persona_id": 108,
+    "name": "Jennifer Lee",
+    "took_covid_vaccine": true,
+    "description": "A high school teacher in Montreal advocating for student health.",
+    "demographics": {
+      "age": 40,
+      "gender": "Female",
+      "location": "Montreal, QC",
+      "occupation": "High School Teacher",
+      "education": "Bachelor's in Education"
+    },
+    "grounding_notes": "Passionate about education and student well-being.",
+    "personality": {
+      "archetype": "The Advocate",
+      "notes": "Proactive, communicative, and community-focused."
+    },
+    "beliefs_and_attitudes": {
+      "initial_stance": "Strongly supportive",
+      "stance_description": "Promoted vaccination among students and colleagues.",
+      "trust_levels": {
+        "scientific_bodies": "high",
+        "government": "high",
+        "mainstream_media": "moderate",
+        "social_media": "low",
+        "expert_opinions": "high"
+      },
+      "concerns": [
+        "Student health and safety",
+        "Educational disruptions",
+        "Community transmission rates"
+      ],
+      "key_motivator": "Ensuring a safe learning environment for students"
+    },
+    "articles_read": [
+      "Vaccines and School Safety: What Teachers Need to Know",
+      "Addressing Vaccine Hesitancy in the Classroom",
+      "The Role of Educators in Promoting Public Health"
+    ]
+  },
+  {
+    "persona_id": 109,
+    "name": "Robert Wilson",
+    "took_covid_vaccine": false,
+    "description": "A long-haul truck driver from Winnipeg skeptical of vaccine mandates.",
+    "demographics": {
+      "age": 50,
+      "gender": "Male",
+      "location": "Winnipeg, MB",
+      "occupation": "Truck Driver",
+      "education": "High School Diploma"
+    },
+    "grounding_notes": "Values independence and personal freedom.",
+    "personality": {
+      "archetype": "The Rebel",
+      "notes": "Independent-minded, resistant to perceived overreach."
+    },
+    "beliefs_and_attitudes": {
+      "initial_stance": "Opposed",
+      "stance_description": "Viewed mandates as infringements on personal rights.",
+      "trust_levels": {
+        "scientific_bodies": "low",
+        "government": "very low",
+        "mainstream_media": "very low",
+        "social_media": "moderate",
+        "expert_opinions": "low"
+      },
+      "concerns": [
+        "Government overreach",
+        "Freedom of choice",
+        "Economic implications of mandates"
+      ],
+      "key_motivator": "Preserving personal autonomy and livelihood"
+    },
+    "articles_read": [
+      "The Case Against Vaccine Mandates: A Personal Freedom Perspective",
+      "How COVID-19 Policies Impact Long-Haul Truckers",
+      "Are Government Measures Overreaching During the Pandemic?"
+    ]
+  },
+  {
+    "persona_id": 110,
+    "name": "Sarah Ahmed",
+    "took_covid_vaccine": true,
+    "description": "A university student in Halifax committed to public health.",
+    "demographics": {
+      "age": 22,
+      "gender": "Female",
+      "location": "Halifax, NS",
+      "occupation": "University Student",
+      "education": "Pursuing Bachelor's in Public Health"
+    },
+    "grounding_notes": "Engaged in campus health initiatives and peer education.",
+    "personality": {
+      "archetype": "The Idealist",
+      "notes": "Optimistic, proactive, and community-oriented."
+    },
+    "beliefs_and_attitudes": {
+      "initial_stance": "Supportive",
+      "stance_description": "Promoted vaccination through student organizations.",
+      "trust_levels": {
+        "scientific_bodies": "high",
+        "government": "moderate",
+        "mainstream_media": "moderate",
+        "social_media": "low",
+        "expert_opinions": "high"
+      },
+      "concerns": [
+        "Campus safety",
+        "Misinformation among peers",
+        "Accessibility of vaccine information"
+      ],
+      "key_motivator": "Contributing to a safe and informed campus community"
+    },
+    "articles_read": [
+      "Student-Led Initiatives to Promote COVID-19 Vaccination",
+      "Combating Misinformation on Social Media: A Guide for Youth",
+      "Public Health Messaging on Campus: Best Practices"
+    ]
+  },
+  {
+    "persona_id": 111,
+    "name": "Michael Hanks",
+    "took_covid_vaccine": true,
+    "description": "A banker in Calgary who values traditional medicine.",
+    "demographics": {
+      "age": 32,
+      "gender": "Male",
+      "location": "Calgary, AB",
+      "occupation": "Banker",
+      "education": "Bachelor's in Business"
+    },
+    "grounding_notes": "Analytical thinker, relies on empirical evidence for decision-making.",
+    "personality": {
+      "archetype": "The Traditionalist",
+      "notes": "Traditional, values old-fashioned medicine."
+    },
+    "beliefs_and_attitudes": {
+      "initial_stance": "Supportive",
+      "stance_description": "Believes in the power of traditional medicine.",
+      "trust_levels": {
+        "scientific_bodies": "high",
+        "government": "moderate",
+        "mainstream_media": "low",
+        "social_media": "very low",
+        "expert_opinions": "high"
+      },
+      "concerns": [
+        "Vaccine side effects",
+        "Government overreach",
+        "Economic implications of mandates"
+      ],
+      "key_motivator": "Traditional medicine is the best way to stay healthy"
+    },
+    "articles_read": [
+      "The Importance of Vaccinating Healthcare Workers",
+      "COVID-19 Vaccine Equity and Access Challenges",
+      "Fighting Misinformation in Public Health Campaigns"
+    ]
+  }
+]

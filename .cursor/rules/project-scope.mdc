@@ -1,0 +1,67 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Next.js Shadcn/ui TailwindCSS Reacharts Dashboard
+
+## Overview
+Your role is to create beautiful and interactive dashboard using Next.js 13+ app router with TypeScript, TailwindCSS, Shadcn/ui and Recharts. Ultilize pnpm as the npm replacement. Use Lucide icons for icons.
+
+### Some Guideline
+- DO NOT CREATE tailwind.config file since this is Tailwind v4 and with native CSS support.
+- DO NEED TO RUN `pnpm dev` after done task since I already have it running.
+
+## About the data analytic dashboard
+The dashboard main purpose is to show visulize data from a simulation run.
+
+### Simulation run context
+The simulation started with 5 AI profiles with each profile have different attributes like 
+- Educational background
+- Personality traits
+- Socioeconomic status
+- Marital status
+- Prior beliefs or experiences with vaccines or healthcare
+
+Each of these profiles will be run 3 times with each run expose the profiles to fake news then real news then mixed news. These profile will be expose to a news article in each iteration. After each iteration, the AI profiles will return a number from 1-4 on how likely they will take the vaccine and another number from 1-4 on how likely they would recommend the vaccine to other people. here will be maximum of 10 iteration of exposing to a news article or until the the threshold reach 3.5. 
+
+### Some charts and insight ideas
+Chart Types
+	1.	Line Charts - Show how each persona's normalized_current_rating evolves over iterations (persuasion trajectory).
+	2.	Stacked Area Charts - Visualize how the proportion of Positive vs. Negative reaction changes across iterations.
+	3.	Bar Charts - Compare the final average normalized_current_rating for each persona.
+	4.	Heatmaps - Highlight rating changes by persona and iteration to easily identify patterns.
+	5.	Scatter Plots - Correlate normalized_current_rating and normalized_recommened_rating to evaluate recommendation impact.
+
+Insight Ideas
+	1.	Conversion Trajectory - Identify which personas showed the most change in rating across the simulation.
+	2.	Resistance Analysis - Discover which personas never reached a high agreement level (e.g., rating above 0.8).
+	3.	Reaction Sentiment Shift - Track when a persona's reaction shifted from Negative to Positive.
+	4.	Editorial Influence - Analyze whether changes in editor_changes align with increases in ratings.
+	5.	Content Effectiveness - Find out if specific articles consistently improved ratings regardless of persona.
+
+### Simulation result
+The simulation result are formatted into JSON format that is stored in `./mock/mock-data.json` then the JSON is translate to TypeScript const in `./src/lib/mock-data.ts`.
+
+The format explanation are as follow:
+```json
+{
+    "id": "random uuid",
+    "persona_id": "persona id int",
+    "persona_name": "persona name",
+    "iteration": "number of current iteration (1-10)",
+    "current_rating": "rating on taking the vaccine or not (1-4) with 1 being no and 4 being yes. 3.5 is the tipping scale where the profile will take vaccine",
+    "normalized_current_rating": "normalized the rating to (0-1) with 6 decimal place percision",
+    "recommened_rating": "rating on would they recommend the vaccine to other people (1-4) with 1 being no and 4 being yes. 3.5 is the tipping scale where the profile will take vaccine",
+    "normalized_recommened_rating": "normalized the recommend rating to (0-1) with 6 decimal place percision",
+    "reaction": "Negative or Positive (no Neutral)",
+    "reason": "Reason on why the profile don't take the vaccine",
+    "editor_changes": "Changes the news article editor makes to better suit the profile",
+    "article": "Article title and few sentences summary",
+    "is_fake": "boolean of is the news is fake or not. Fake news is TRUE and legitiment news is FALSE",
+    "is_real": "boolean of the the news is factual or opinion. factual is TRUE and opinion is false"
+  },
+```
+
+## Your Job
+Your job is to look at the data to create beatiful charts using Recharts and TailwindCSS with Next.js and TypeScript.
