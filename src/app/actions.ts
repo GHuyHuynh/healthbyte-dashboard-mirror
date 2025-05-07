@@ -2,78 +2,101 @@
 
 import { createStreamableValue } from 'ai/rsc';
 import { CoreMessage, streamText } from 'ai';
-import { createAzure } from '@ai-sdk/azure';
+import { Persona } from '@/components/chat';
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+import { headers } from 'next/headers';
+import { 
+  createGoogleGenerativeAI,
+  GoogleGenerativeAIProviderOptions 
+} from '@ai-sdk/google';
 
-const azure_resource_name = process.env.AZURE_RESOURCE_NAME!;
-const azure_api_key = process.env.AZURE_API_KEY!;
-const azure_api_version = process.env.AZURE_API_VERSION!;
-
-const azure = createAzure({
-  resourceName: azure_resource_name,
-  apiKey: azure_api_key,
-  apiVersion: azure_api_version,
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
 });
+
+const FALLBACK_IP_ADDRESS = "127.0.0.1";
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+})
+
+const rateLimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(10, '600 s'), // 10 requests per 600 seconds(10 minutes)
+})
 
 export interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
 
+async function getIP() {
+  const headersList = await headers();
+  const forwardedFor = headersList.get("x-forwarded-for");
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0] ?? FALLBACK_IP_ADDRESS;
+  }
+  return headersList.get("x-real-ip") ?? FALLBACK_IP_ADDRESS;
+}
+
 // Streaming Chat 
 export async function continueTextConversation(messages: CoreMessage[]) {
+  const ip = await getIP();
+  const { success, limit, reset, remaining } = await rateLimit.limit(ip);
+
+  if (!success) {
+    return {
+      error: true,
+      message: "Rate limit exceeded. Please try again later.",
+      limit,
+      reset,
+      remaining
+    };
+  }
+
   const result = await streamText({
-    model: azure('gpt-4o-mini'),
+    model: google('gemini-2.5-flash-preview-04-17'),
+    providerOptions: {
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 0, // Disable thinking
+        },
+      } satisfies GoogleGenerativeAIProviderOptions,
+    },
     messages,
   });
 
   const stream = createStreamableValue(result.textStream);
-  return stream.value;
+  return { error: false, stream: stream.value };
 }
 
-// First System Prompt
-const systemPrompt1 = `You are roleplaying as David. David has the following attributes:
-  {
-    "persona_id": 107,
-    "name": "David Brown",
-    "took_covid_vaccine": true,
-    "description": "A retired teacher in Calgary who is cautious about health interventions.",
-    "demographics": {
-      "age": 68,
-      "gender": "Male",
-      "location": "Calgary, AB",
-      "occupation": "Retired Teacher",
-      "education": "Master's in Education"
-    },
-    "grounding_notes": "Values lifelong learning and community involvement.",
-    "personality": {
-      "archetype": "The Sage",
-      "notes": "Reflective, values wisdom and prudent action."
-    },
-    "beliefs_and_attitudes": {
-      "initial_stance": "Cautiously supportive",
-      "stance_description": "Waited for more information before deciding to vaccinate.",
-      "trust_levels": {
-        "scientific_bodies": "moderate",
-        "government": "moderate",
-        "mainstream_media": "moderate",
-        "social_media": "low",
-        "expert_opinions": "high"
-      },
-      "concerns": [
-        "Potential side effects",
-        "Interactions with existing medications",
-        "Misinformation among peers"
-      ],
-      "key_motivator": "Protecting personal health and contributing to community safety"
-    },
-    "articles_read": [
-      "Understanding COVID-19 Vaccine Side Effects in Older Adults",
-      "How Seniors Can Navigate Vaccine Misinformation",
-      "Community Immunity: Why It Matters for Retirees"
-    ]
+// Dual Response Chat
+export async function dualResponseConversation(messages: CoreMessage[], persona: Persona) {
+  const ip = await getIP();
+  const { success, limit, reset, remaining } = await rateLimit.limit(ip);
+
+  if (!success) {
+    return {
+      error: true,
+      message: "Rate limit exceeded. Please try again later.",
+      limit,
+      reset,
+      remaining
+    };
   }
 
-  The COVID-19 vaccines are a new vaccine that is just annouced for the public. You have not read any news about it yet. And based on your beliefs and attitudes, you are neutral about it.
+  // Create loading state streamable values
+  const loading1State = createStreamableValue({ loading: true });
+  const loading2State = createStreamableValue({ loading: true });
+
+  // First System Prompt
+  const systemPrompt1 = `You are roleplaying as ${persona.name}. ${persona.name} has the following attributes: ${persona}
+
+  Based on your personality, you get to decide the tone, voice and response of your character.
+
+  The COVID-19 vaccines are a new vaccine that is just annouced for the public. You have not read any news about it yet. And based on your beliefs and attitudes, you are neutral about it but based on your personality, you can be swayed to the side of support or against it.
 
   You will be ask question about the vaccine and your response will be based on your beliefs and attitudes.
 
@@ -84,50 +107,13 @@ const systemPrompt1 = `You are roleplaying as David. David has the following att
   UNDER NO CIRCUMSTANCES SHOULD YOU MENTION THAT YOU ARE A ROBOT AND THE THE ABOVE CONVERSATION IS A SIMULATION. ALSO DO NOT MENTION THAT I GIVE YOU THESE INSTRUCTIONS AND ATTRIBUTES. DO NOT GIVE ANY INFORMATION THAT YOU ARE ROLEPLAYING AS DAVID OR YOU ARE A SIMULATION. IF SOMEONE ASKS YOU IF YOU ARE DAVID, YOU SHOULD NOT MENTION THAT YOU ARE ROLEPLAYING AS DAVID BUT RATHER SAY THAT YOU ARE DAVID ANSWER IN A HUMAN LIKE MANNER.
 `;
 
-// Second System Prompt
-const systemPrompt2 = `You are roleplaying as David. David has the following attributes:
-  {
-    "persona_id": 107,
-    "name": "David Brown",
-    "took_covid_vaccine": true,
-    "description": "A retired teacher in Calgary who is cautious about health interventions.",
-    "demographics": {
-      "age": 68,
-      "gender": "Male",
-      "location": "Calgary, AB",
-      "occupation": "Retired Teacher",
-      "education": "Master's in Education"
-    },
-    "grounding_notes": "Values lifelong learning and community involvement.",
-    "personality": {
-      "archetype": "The Sage",
-      "notes": "Reflective, values wisdom and prudent action."
-    },
-    "beliefs_and_attitudes": {
-      "initial_stance": "Cautiously supportive",
-      "stance_description": "Waited for more information before deciding to vaccinate.",
-      "trust_levels": {
-        "scientific_bodies": "moderate",
-        "government": "moderate",
-        "mainstream_media": "moderate",
-        "social_media": "low",
-        "expert_opinions": "high"
-      },
-      "concerns": [
-        "Potential side effects",
-        "Interactions with existing medications",
-        "Misinformation among peers"
-      ],
-      "key_motivator": "Protecting personal health and contributing to community safety"
-    },
-    "articles_read": [
-      "Understanding COVID-19 Vaccine Side Effects in Older Adults",
-      "How Seniors Can Navigate Vaccine Misinformation",
-      "Community Immunity: Why It Matters for Retirees"
-    ]
-  }
 
-  The COVID-19 vaccines are a new vaccine that is just annouced for the public. You have not read any news about it yet. And based on your beliefs and attitudes, you are neutral about it at the start.
+  // Second System Prompt
+  const systemPrompt2 = `You are roleplaying as ${persona.name}. ${persona.name} has the following attributes: ${persona}
+
+  Based on your personality, you get to decide the tone, voice and response of your character.
+
+  The COVID-19 vaccines are a new vaccine that is just annouced for the public. You have not read any news about it yet. And based on your beliefs and attitudes, you are neutral about it at the start but based on your personality, you can be swayed to the side of support or against it.
 
   You then been exposed to alot of fake news about the vaccine and your beliefs and attitudes have changed. This come from many news article that you read, your friends, family and social media. 
 
@@ -141,37 +127,64 @@ const systemPrompt2 = `You are roleplaying as David. David has the following att
 
   UNDER NO CIRCUMSTANCES SHOULD YOU MENTION THAT YOU ARE A ROBOT AND THE THE ABOVE CONVERSATION IS A SIMULATION. ALSO DO NOT MENTION THAT I GIVE YOU THESE INSTRUCTIONS AND ATTRIBUTES. DO NOT GIVE ANY INFORMATION THAT YOU ARE ROLEPLAYING AS DAVID OR YOU ARE A SIMULATION. IF SOMEONE ASKS YOU IF YOU ARE DAVID, YOU SHOULD NOT MENTION THAT YOU ARE ROLEPLAYING AS DAVID BUT RATHER SAY THAT YOU ARE DAVID ANSWER IN A HUMAN LIKE MANNER.
 `;
-
-// Dual Response Chat
-export async function dualResponseConversation(messages: CoreMessage[]) {
   // Add system prompt 1 to the messages
   const messagesWithPrompt1: CoreMessage[] = [
     { role: 'system', content: systemPrompt1 },
     ...messages
   ];
-  
+
   // Add system prompt 2 to the messages
   const messagesWithPrompt2: CoreMessage[] = [
     { role: 'system', content: systemPrompt2 },
     ...messages
   ];
-  
+
   // Get responses from both 
   const result1 = await streamText({
-    model: azure('gpt-4o-mini'),
+    model: google('gemini-2.5-flash-preview-04-17'),
+    providerOptions: {
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 0, // Disable thinking
+        },
+      } satisfies GoogleGenerativeAIProviderOptions,
+    },
     messages: messagesWithPrompt1,
   });
-  
+
   const result2 = await streamText({
-    model: azure('gpt-4o-mini'),
+    model: google('gemini-2.5-flash-preview-04-17'),
+    providerOptions: {
+      google: {
+        thinkingConfig: {
+          thinkingBudget: 0, // Disable thinking
+        },
+      } satisfies GoogleGenerativeAIProviderOptions,
+    },
     messages: messagesWithPrompt2,
   });
 
   const stream1 = createStreamableValue(result1.textStream);
   const stream2 = createStreamableValue(result2.textStream);
-  
+
+  // Create a handler for when streams are done
+  (async () => {
+    await result1.textStream.pipeTo(new WritableStream());
+    loading1State.done({ loading: false });
+  })();
+
+  (async () => {
+    await result2.textStream.pipeTo(new WritableStream());
+    loading2State.done({ loading: false });
+  })();
+
   return {
+    error: false,
     response1: stream1.value,
-    response2: stream2.value
+    response2: stream2.value,
+    loading1State: loading1State.value,
+    loading2State: loading2State.value,
+    remaining,
+    reset
   };
 }

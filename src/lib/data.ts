@@ -1,8 +1,7 @@
 import { convertJsonToPersonaData } from '@/lib/utils';
 import mixedNewsData from '../../data/mixed-news.json';
 import fakeNewsData from '../../data/fake_news.json';
-import realNewsData from '../../data/real_news.json';
-
+import realNewsData from '../../data/real_news.json'; 
 export interface PersonaData {
   id: string;
   session_id: string;

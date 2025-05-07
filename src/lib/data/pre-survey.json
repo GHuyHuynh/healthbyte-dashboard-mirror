@@ -1,0 +1,31 @@
+[
+  {
+    "persona_name": "Emily Nguyen",
+    "normalized_vaccine_rating": 0.95
+  },
+  {
+    "persona_name": "James Patel",
+    "normalized_vaccine_rating": 0.75
+  },
+  {
+    "persona_name": "David Brown",
+    "normalized_vaccine_rating": 0.5
+  },
+  {
+    "persona_name": "Jennifer Lee",
+    "normalized_vaccine_rating": 0.856
+  },
+  {
+    "persona_name": "Robert Wilson",
+    "normalized_vaccine_rating": 0.25
+  },
+  {
+    "persona_name": "Sarah Ahmed",
+    "normalized_vaccine_rating": 0.80
+  },
+  {
+    "persona_name": "Michael Hanks",
+    "normalized_vaccine_rating": 0.62
+  }
+
+]

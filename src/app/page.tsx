@@ -52,7 +52,9 @@ export default function RootPage() {
       {/* Combined row with personas link and dataset selection */}
       <div className="flex flex-col md:flex-row items-center justify-between mb-6 gap-4 md:gap-0">
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <Link href="/chat">
+
+          {/* hardcoded link to persona 'David'*/}
+          <Link href="/chat/107">
             <AIComparisionButton title="Chat with Persona" />
           </Link>
           <Link href="/personas" className="px-3 py-1 rounded-md bg-blue-50 text-blue-600 text-md hover:bg-blue-100 hover:text-blue-800 transition">View Personas</Link>

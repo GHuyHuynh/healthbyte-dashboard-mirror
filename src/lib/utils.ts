@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { PersonaData } from "./data";
+import { PersonaData } from "./data"; 
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
