@@ -52,9 +52,9 @@ export const VaccinePieChart = ({ className, dataSource = "all" }: PieChartProps
   
   // Custom colors for each category
   const COLORS = {
-    supportive: "#4ade80",    // Green-400
-    neutral: "#9ca3af",       // Gray-400
-    unsupportive: "#f87171"   // Red-400
+    supportive: "#16a34a",    // Green-600
+    neutral: "#64748b",       // Slate-600
+    unsupportive: "#dc2626"   // Red-600
   };
 
   // Custom tooltip to show personas in each category
