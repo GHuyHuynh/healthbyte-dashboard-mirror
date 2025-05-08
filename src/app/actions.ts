@@ -76,13 +76,13 @@ export async function continueTextConversation(messages: CoreMessage[]) {
 export async function dualResponseConversation(messages: CoreMessage[], persona: Persona) {
   const ip = await getIP();
   const { success, limit, reset, remaining } = await rateLimit.limit(ip);
-
+  
   if (!success) {
     return {
       error: true,
       message: "Rate limit exceeded. Please try again later.",
       limit,
-      reset,
+      reset: Date.now() + (600 * 1000), 
       remaining
     };
   }
@@ -185,6 +185,6 @@ export async function dualResponseConversation(messages: CoreMessage[], persona:
     loading1State: loading1State.value,
     loading2State: loading2State.value,
     remaining,
-    reset
+    reset: Date.now() + (600 * 1000) // Set to 10 minutes (600 seconds) from now
   };
 }

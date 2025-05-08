@@ -220,9 +220,13 @@ export default function Chat({ persona }: ChatProps) {
     if (diffInSeconds < 60) {
       return `${diffInSeconds}s`;
     } else if (diffInSeconds < 3600) {
-      return `${Math.floor(diffInSeconds / 60)}m ${diffInSeconds % 60}s`;
+      const minutes = Math.floor(diffInSeconds / 60);
+      const seconds = diffInSeconds % 60;
+      return `${minutes}m ${seconds}s`;
     } else {
-      return `${Math.floor(diffInSeconds / 3600)}h ${Math.floor((diffInSeconds % 3600) / 60)}m`;
+      const hours = Math.floor(diffInSeconds / 3600);
+      const minutes = Math.floor((diffInSeconds % 3600) / 60);
+      return `${hours}h ${minutes}m`;
     }
   };
   
