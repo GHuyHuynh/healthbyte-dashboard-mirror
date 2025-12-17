@@ -11,8 +11,6 @@ import {
   GoogleGenerativeAIProviderOptions 
 } from '@ai-sdk/google';
 
-const MODEL_NAME = 'gemini-2.0-flash';
-
 const google = createGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
 });
@@ -59,7 +57,7 @@ export async function continueTextConversation(messages: CoreMessage[]) {
   }
 
   const result = await streamText({
-    model: google(MODEL_NAME),
+    model: google('gemini-2.5-flash-preview-04-17'),
     providerOptions: {
       google: {
         thinkingConfig: {
@@ -143,7 +141,7 @@ export async function dualResponseConversation(messages: CoreMessage[], persona:
 
   // Get responses from both 
   const result1 = await streamText({
-    model: google(MODEL_NAME),
+    model: google('gemini-2.5-flash-preview-04-17'),
     providerOptions: {
       google: {
         thinkingConfig: {
@@ -155,7 +153,7 @@ export async function dualResponseConversation(messages: CoreMessage[], persona:
   });
 
   const result2 = await streamText({
-    model: google(MODEL_NAME),
+    model: google('gemini-2.5-flash-preview-04-17'),
     providerOptions: {
       google: {
         thinkingConfig: {
